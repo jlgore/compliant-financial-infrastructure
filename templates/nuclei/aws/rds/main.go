@@ -83,6 +83,11 @@ func main() {
 				"Project":     "cfi-rds",
 				"ManagedBy":   "Pulumi",
 			},
+			// New options for Multi-AZ and backups
+			MultiAZ:               true,
+			BackupRetentionPeriod: 7,
+			BackupWindow:          "03:00-04:00",
+			MaintenanceWindow:     "sun:04:30-sun:05:30",
 		})
 		if err != nil {
 			return err

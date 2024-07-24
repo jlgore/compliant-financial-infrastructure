@@ -20,6 +20,10 @@ type RDSInstanceArgs struct {
 	Tags                map[string]string
 	Encryption          bool
 	CreateKey           bool
+	MultiAZ             bool                // New field for Multi-AZ support
+	BackupRetentionPeriod int               // New field for backup retention period
+	BackupWindow        string              // New field for backup window
+	MaintenanceWindow   string              // New field for maintenance window
 }
 
 type RDSInstance struct {
@@ -58,6 +62,10 @@ func NewRDSInstance(ctx *pulumi.Context, name string, args *RDSInstanceArgs, opt
 		VpcSecurityGroupIds: args.VpcSecurityGroupIds,
 		SkipFinalSnapshot:   pulumi.Bool(true),
 		Tags:                pulumi.ToStringMap(args.Tags),
+		MultiAz:             pulumi.Bool(args.MultiAZ),                    // Set Multi-AZ
+		BackupRetentionPeriod: pulumi.Int(args.BackupRetentionPeriod),     // Set backup retention period
+		BackupWindow:        pulumi.String(args.BackupWindow),             // Set backup window
+		MaintenanceWindow:   pulumi.String(args.MaintenanceWindow),        // Set maintenance window
 	}
 
 	// Handle encryption
@@ -72,6 +80,7 @@ func NewRDSInstance(ctx *pulumi.Context, name string, args *RDSInstanceArgs, opt
 				return nil, err
 			}
 			instanceArgs.KmsKeyId = key.Arn
+			rdsInstance.KMSKey = key
 		}
 	}
 
