@@ -7,23 +7,24 @@ import (
 )
 
 type RDSInstanceArgs struct {
-	InstanceClass       string
-	AllocatedStorage    int
-	Engine              string
-	EngineVersion       string
-	Username            string
-	Password            string
-	DbName              string
-	PubliclyAccessible  bool
-	SubnetIds           pulumi.StringArrayInput
-	VpcSecurityGroupIds pulumi.StringArrayInput
-	Tags                map[string]string
-	Encryption          bool
-	CreateKey           bool
-	MultiAZ             bool                // New field for Multi-AZ support
-	BackupRetentionPeriod int               // New field for backup retention period
-	BackupWindow        string              // New field for backup window
-	MaintenanceWindow   string              // New field for maintenance window
+	InstanceClass                    string
+	AllocatedStorage                 int
+	Engine                           string
+	EngineVersion                    string
+	Username                         string
+	Password                         string
+	DbName                           string
+	PubliclyAccessible               bool
+	SubnetIds                        pulumi.StringArrayInput
+	VpcSecurityGroupIds              pulumi.StringArrayInput
+	Tags                             map[string]string
+	Encryption                       bool
+	CreateKey                        bool
+	MultiAZ                          bool
+	IAMDatabaseAuthenticationEnabled bool
+	BackupRetentionPeriod            int    // New field for backup retention period
+	BackupWindow                     string // New field for backup window
+	MaintenanceWindow                string // New field for maintenance window
 }
 
 type RDSInstance struct {
@@ -50,22 +51,23 @@ func NewRDSInstance(ctx *pulumi.Context, name string, args *RDSInstanceArgs, opt
 	}
 
 	instanceArgs := &rds.InstanceArgs{
-		InstanceClass:       pulumi.String(args.InstanceClass),
-		AllocatedStorage:    pulumi.Int(args.AllocatedStorage),
-		Engine:              pulumi.String(args.Engine),
-		EngineVersion:       pulumi.String(args.EngineVersion),
-		Username:            pulumi.String(args.Username),
-		Password:            pulumi.String(args.Password),
-		DbName:              pulumi.String(args.DbName),
-		PubliclyAccessible:  pulumi.Bool(args.PubliclyAccessible),
-		DbSubnetGroupName:   subnetGroup.Name,
-		VpcSecurityGroupIds: args.VpcSecurityGroupIds,
-		SkipFinalSnapshot:   pulumi.Bool(true),
-		Tags:                pulumi.ToStringMap(args.Tags),
-		MultiAz:             pulumi.Bool(args.MultiAZ),                    // Set Multi-AZ
-		BackupRetentionPeriod: pulumi.Int(args.BackupRetentionPeriod),     // Set backup retention period
-		BackupWindow:        pulumi.String(args.BackupWindow),             // Set backup window
-		MaintenanceWindow:   pulumi.String(args.MaintenanceWindow),        // Set maintenance window
+		InstanceClass:                    pulumi.String(args.InstanceClass),
+		AllocatedStorage:                 pulumi.Int(args.AllocatedStorage),
+		Engine:                           pulumi.String(args.Engine),
+		EngineVersion:                    pulumi.String(args.EngineVersion),
+		Username:                         pulumi.String(args.Username),
+		Password:                         pulumi.String(args.Password),
+		DbName:                           pulumi.String(args.DbName),
+		PubliclyAccessible:               pulumi.Bool(args.PubliclyAccessible),
+		DbSubnetGroupName:                subnetGroup.Name,
+		VpcSecurityGroupIds:              args.VpcSecurityGroupIds,
+		SkipFinalSnapshot:                pulumi.Bool(true),
+		IamDatabaseAuthenticationEnabled: pulumi.Bool(args.IAMDatabaseAuthenticationEnabled),
+		Tags:                             pulumi.ToStringMap(args.Tags),
+		MultiAz:                          pulumi.Bool(args.MultiAZ),              // Set Multi-AZ
+		BackupRetentionPeriod:            pulumi.Int(args.BackupRetentionPeriod), // Set backup retention period
+		BackupWindow:                     pulumi.String(args.BackupWindow),       // Set backup window
+		MaintenanceWindow:                pulumi.String(args.MaintenanceWindow),  // Set maintenance window
 	}
 
 	// Handle encryption
