@@ -6,10 +6,10 @@ info:
     This workflow validates the RDS configurations.
 
 workflows:
-  # - template: ../nuclei/aws/rds/rds-automated-backups.yaml
+  - template: ../nuclei/aws/rds/rds-automated-backups.yaml
   - template: ../nuclei/aws/rds/rds-encryption.yaml
-  # - template: ../nuclei/aws/rds/rds-multi-az.yaml
-  # - template: ../nuclei/aws/rds/rds-public-access.yaml
+  - template: ../nuclei/aws/rds/rds-multi-az.yaml
+  - template: ../nuclei/aws/rds/rds-public-access.yaml
   - template: ../nuclei/aws/rds/rds-rbac.yaml
   - tags: aws,rds
 
